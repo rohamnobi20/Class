@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>کلاس های مجازی</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#eef1f8;--card:#fff;--tx:#18203a;--mut:#6c7690;--pri:#4f46e5;--pri2:#7c3aed;--bd:#e0e5f1;--red:#e5484d;--grn:#16a34a;--amb:#f59e0b;--soft:#f5f7fc;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d1117;--card:#161c28;--tx:#e8ecf6;--mut:#8b95ad;--bd:#273046;--soft:#1d2536}}
+:root[data-theme="dark"]{--bg:#0d1117;--card:#161c28;--tx:#e8ecf6;--mut:#8b95ad;--bd:#273046;--soft:#1d2536}
+*{box-sizing:border-box}html,body{margin:0}
+body{background:var(--bg);color:var(--tx);font-family:Vazirmatn,Tahoma,sans-serif;font-size:14px}
+button,input{font:inherit;color:var(--tx)}
+button{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:7px 12px;cursor:pointer;transition:.15s}
+button:hover{border-color:var(--pri)}button:disabled{opacity:.45;cursor:not-allowed}
+button.on{background:linear-gradient(135deg,var(--pri),var(--pri2));color:#fff;border-color:transparent}
+button.off{background:var(--red);color:#fff;border-color:transparent}
+input{background:var(--soft);border:1px solid var(--bd);border-radius:10px;padding:9px 11px;width:100%}
+#join{max-width:400px;margin:9vh auto;padding:26px;background:var(--card);border:1px solid var(--bd);border-radius:20px;display:flex;flex-direction:column;gap:12px;box-shadow:0 20px 60px rgba(79,70,229,.15)}
+#join h1{margin:0;font-size:24px;font-weight:800;background:linear-gradient(135deg,var(--pri),var(--pri2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hint{font-size:12px;color:var(--mut);line-height:1.9}
+#app{display:none}
+header{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;padding:12px 16px;color:#fff;background:linear-gradient(135deg,var(--pri),var(--pri2))}
+header b{font-size:16px;font-weight:800}.pill{background:rgba(255,255,255,.2);border-radius:99px;padding:3px 11px;font-size:12px;margin-inline-start:6px}
+header button{background:rgba(255,255,255,.18);color:#fff;border-color:transparent}
+.wrap{display:grid;grid-template-columns:1fr 350px;gap:12px;padding:12px;align-items:start}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
+.tools{display:flex;gap:6px;padding:9px;border-bottom:1px solid var(--bd);align-items:center;flex-wrap:wrap}
+.sw{width:24px;height:24px;border-radius:50%;border:2px solid var(--bd);padding:0}.sw.sel{border-color:var(--tx);transform:scale(1.15)}
+.sep{width:1px;height:22px;background:var(--bd)}
+#board{width:100%;aspect-ratio:16/9;background:#fff;touch-action:none;cursor:crosshair;display:block}
+#wait{display:flex;aspect-ratio:16/9;flex-direction:column;align-items:center;justify-content:center;gap:8px;background:radial-gradient(circle at 30% 20%,#6d5df6 0,#312e81 55%,#1e1b4b);color:#fff;text-align:center;padding:20px}#wait .big{font-size:56px}#wait b{font-size:20px}#wait span{opacity:.8;font-size:13px}
+.vids{display:grid;grid-template-columns:repeat(auto-fill,minmax(105px,1fr));gap:6px;padding:8px;max-height:310px;overflow:auto}
+.v{aspect-ratio:4/3;background:linear-gradient(160deg,#2a3350,#171c2e);border-radius:10px;position:relative;overflow:hidden;color:#fff;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800}
+.v video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.v span{position:absolute;bottom:0;right:0;left:0;font-size:11px;font-weight:400;padding:10px 6px 3px;background:linear-gradient(transparent,rgba(0,0,0,.7));z-index:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.v.t{outline:2px solid var(--amb)}
+.tabs{display:flex;border-bottom:1px solid var(--bd)}.tabs button{flex:1;border:0;border-radius:0;background:none;padding:10px}.tabs button.sel{color:var(--pri);box-shadow:inset 0 -3px var(--pri);font-weight:600}
+.pane{display:none;flex-direction:column;height:340px}.pane.sel{display:flex}
+#msgs{flex:1;overflow:auto;padding:10px;display:flex;flex-direction:column;gap:7px}
+.m{background:var(--soft);border-radius:12px;padding:6px 10px;max-width:92%}.m.me{background:var(--pri);color:#fff;align-self:flex-start}
+.m small{display:block;opacity:.75;font-size:11px}.m.sys{align-self:center;background:none;color:var(--mut);font-size:12px}
+.send{display:flex;gap:6px;padding:8px;border-top:1px solid var(--bd)}
+#people{flex:1;overflow:auto;padding:6px}
+.p{display:flex;align-items:center;gap:8px;padding:6px;border-radius:10px}.p:hover{background:var(--soft)}
+.av{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--pri),var(--pri2));color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600;flex:none}
+.p .n{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.b{font-size:10px;border-radius:99px;padding:1px 8px;background:var(--soft);color:var(--mut)}.b.teacher{background:var(--amb);color:#000}.b.assistant{background:var(--grn);color:#fff}
+.p button{padding:2px 8px;font-size:12px}
+footer{display:flex;justify-content:center;gap:8px;padding:6px 12px 16px;flex-wrap:wrap}
+@media(max-width:820px){.wrap{grid-template-columns:1fr}}
+
+:root[data-th=blaze]{--pri:#ff6a00;--pri2:#e11d48}:root[data-th=storm]{--pri:#0ea5e9;--pri2:#6366f1}:root[data-th=shade]{--pri:#8b5cf6;--pri2:#db2777}:root[data-th=leaf]{--pri:#16a34a;--pri2:#0d9488}
+body{background-image:radial-gradient(rgba(127,127,160,.22) 1.2px,transparent 1.2px);background-size:14px 14px}
+header{clip-path:polygon(0 0,100% 0,100% 80%,96% 100%,0 100%);padding-bottom:22px}
+.card{border:2px solid var(--pri);box-shadow:4px 4px 0 var(--pri2);border-radius:14px}.card:has(#fx){position:relative}
+button{border-width:2px;font-weight:600;box-shadow:0 3px 0 var(--bd)}button:active{transform:translateY(2px);box-shadow:none}
+#wait{background:repeating-conic-gradient(at 50% 50%,var(--pri) 0 5deg,var(--pri2) 5deg 10deg)}
+#wait b{background:#000;padding:5px 18px;transform:skew(-8deg);font-size:22px;border:2px solid #fff}
+.v.sp{outline:3px solid #22d3ee;box-shadow:0 0 16px #22d3ee}.v{cursor:pointer}.v b{font-size:30px}
+#fx{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:5}
+.fl{position:absolute;bottom:-30px;font-size:34px;animation:up 2.2s ease-out forwards}@keyframes up{to{transform:translateY(-340px);opacity:0}}
+.credit{text-align:center;padding:10px 12px 18px;font-size:12px;font-weight:600;color:var(--mut)}
+.pick{display:flex;gap:6px;flex-wrap:wrap}.pick button{padding:4px 9px}.pick .sel{background:var(--pri);color:#fff;border-color:var(--pri)}
+</style>
+</head>
+<body>
+<div id="join">
+ <h1>🎓 کلاس های مجازی</h1>
+ <input id="nm" placeholder="نام شما">
+ <input id="code" placeholder="کد کلاس" value="class1" dir="ltr">
+ <div class="hint">شخصیت شما:</div><div class="pick" id="avs"></div><div class="hint">تم رنگی:</div><div class="pick" id="ths"></div>
+ <div id="perm" style="background:var(--soft);border:1px solid var(--bd);border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:8px">
+  <b>🎥 دسترسی دوربین و میکروفون</b>
+  <div class="hint" id="permst">وضعیت: در حال بررسی…</div>
+  <button id="askperm" class="on">اجازه‌ی دوربین و میکروفون</button>
+  <video id="pv" autoplay muted playsinline style="display:none;width:100%;border-radius:10px;background:#000;max-height:170px;object-fit:cover"></video>
+  <div class="hint" id="permmsg">با زدن دکمه، Chrome یک پنجره‌ی «Allow / اجازه» نشان می‌دهد؛ آن را تأیید کنید.</div>
+ </div>
+ <button id="go" class="on">ورود به کلاس</button>
+ <div class="hint">● اولین نفری که وارد شود <b>استاد</b> می‌شود و نفر دوم <b>دستیار</b>؛ بقیه دانش‌آموز هستند.<br>● ظرفیت کلاس ۴۰ نفر است.<br>● هنگام ورود، دسترسی به دوربین و میکروفون را تأیید کنید.<br>● تخته را فقط استاد و دستیار می‌بینند تا زمانی که نمایش را بزنند و فقط آن‌ها می‌توانند روی آن بنویسند.</div>
+</div>
+<div id="app">
+ <header>
+  <div><b id="title"></b><span class="pill" id="cnt"></span><span class="pill" id="me"></span><span class="pill" id="net">🟡 اتصال…</span></div>
+  <div style="display:flex;gap:6px;flex-wrap:wrap">
+   <button id="invite">📋 کپی کد کلاس</button>
+   <button id="showb" class="on" style="display:none">▶ شروع کلاس</button>
+   <button id="muteall" style="display:none">🔇 بی‌صدا کردن همه</button>
+  </div>
+ </header>
+ <div class="wrap">
+  <div class="card">
+   <div id="fx"></div><div id="wait"><div class="big">🕐</div><b>کلاس هنوز شروع نشده</b><span>منتظر بمانید تا استاد یا دستیار کلاس را شروع کند</span><button id="startb" class="on" style="display:none;font-size:18px;padding:10px 28px;margin-top:8px">▶ شروع کلاس</button></div>
+   <div class="tools" id="tools" style="display:none">
+    <button id="pen" class="on">✏️ قلم</button><button id="eraser">🧽 پاک‌کن</button><span class="sep"></span>
+    <span id="sws" style="display:flex;gap:5px"></span><span class="sep"></span>
+    <button id="sz">ضخامت: متوسط</button>
+    <button id="savb" style="margin-inline-start:auto">💾 ذخیره</button><button id="clear">🗑 پاک کردن تخته</button>
+   </div>
+   <canvas id="board" style="display:none"></canvas>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:12px">
+   <div class="card"><div class="vids" id="vids"></div></div>
+   <div class="card">
+    <div class="tabs"><button id="t1" class="sel">💬 چت</button><button id="t2">👥 افراد</button><button id="t3">📊 نظرسنجی</button></div>
+    <div class="pane sel" id="p1"><div id="msgs"></div>
+     <div class="send"><input id="inp" placeholder="پیام..."><button id="snd" class="on">ارسال</button></div></div>
+    <div class="pane" id="p2"><div id="people"></div></div>
+    <div class="pane" id="p3" style="padding:10px;overflow:auto"><div id="pform" style="display:none;flex-direction:column;gap:6px;margin-bottom:10px"><input id="pq" placeholder="سؤال"><input id="po" placeholder="گزینه‌ها با ویرگول: الف، ب، ج"><div style="display:flex;gap:6px"><button id="pgo" class="on">شروع</button><button id="pend">پایان</button></div></div><div id="pollbox" class="hint">نظرسنجی فعالی وجود ندارد.</div></div>
+   </div>
+  </div>
+ </div>
+ <footer>
+  <button id="media" class="on">🎥 فعال‌سازی دوربین و میکروفون</button><button id="mic">🎤 میکروفون</button><button id="cam">📷 دوربین</button>
+  <button class="rx" data-e="👏">👏</button><button class="rx" data-e="❤️">❤️</button><button class="rx" data-e="😂">😂</button><button class="rx" data-e="🔥">🔥</button><button id="share" style="display:none">🖥 اشتراک صفحه</button><button id="unmute" class="on" style="display:none">🔊 فعال‌سازی صدا</button><button id="vc">🎧 اتاق صوتی</button><button id="hand">✋ اجازه سؤال</button><button id="leave" class="off">خروج</button>
+ </footer>
+</div>
+<div class="credit">سازنده: رهام</div>
+<script>
+const $=id=>document.getElementById(id),MAX=40,ICE={iceServers:[{urls:'stun:stun.l.google.com:19302'}]};
+const RL={teacher:'استاد',assistant:'دستیار',student:'دانش‌آموز'},staff=r=>r==='teacher'||r==='assistant';
+let lastB=false,R=null,me=null,name='',code='',stream=null,pcs={},pend={},tiles={},hist=[],RM={},myRole='student',locked=false,allowed=false,ready=false,synced={},peersNow=[];
+$('code').value=location.hash.slice(1).replace(/[^a-zA-Z0-9_.-]/g,'')||'class1';
+// ---- roles: earliest named peer = teacher, second = assistant
+function named(ps){return ps.filter(p=>p.presence&&p.presence.name&&p.presence.t).slice().sort((a,b)=>a.presence.t-b.presence.t||(a.peer<b.peer?-1:1))}
+function ini(n){return (n||'؟').trim().charAt(0)}
+// ---- chat
+function add(n,t,role,mine){const d=document.createElement('div');d.className='m'+(mine?' me':'')+(n?'':' sys');
+ if(n){const s=document.createElement('small');s.textContent=n+(role&&role!=='student'?' ('+RL[role]+')':'');d.appendChild(s)}
+ const b=document.createElement('div');b.textContent=t;d.appendChild(b);$('msgs').appendChild(d);$('msgs').scrollTop=1e9}
+function send(){const t=$('inp').value.trim();if(!t)return;$('inp').value='';if(R)em('chat',{n:name,t:t.slice(0,500),h:new Date().toTimeString().slice(0,5)});else add(name,t,myRole,1)}
+$('snd').onclick=send;$('inp').onkeydown=e=>{if(e.key==='Enter')send()};
+['t1','t2','t3'].forEach((t,i)=>$(t).onclick=()=>{[0,1,2].forEach(j=>{$('t'+(j+1)).classList.toggle('sel',j==i);$('p'+(j+1)).classList.toggle('sel',j==i)})});
+// ---- board
+const c=$('board'),x=c.getContext('2d');c.width=1280;c.height=720;
+function wipe(){x.fillStyle='#fff';x.fillRect(0,0,1280,720)}wipe();
+function seg(o){x.lineCap=x.lineJoin='round';x.lineWidth=o.e?o.w*5:o.w;x.strokeStyle=o.e?'#fff':o.c;x.beginPath();const p=o.p;x.moveTo(p[0][0]*1280,p[0][1]*720);
+ if(p.length==1)x.lineTo(p[0][0]*1280+.1,p[0][1]*720);for(let i=1;i<p.length;i++)x.lineTo(p[i][0]*1280,p[i][1]*720);x.stroke()}
+function store(d){const o={c:d.c,e:d.e,w:d.w,p:d.p};hist.push(o);if(hist.length>1500)hist.shift()}
+const COLS=['#18203a','#e5484d','#f59e0b','#16a34a','#2563eb','#7c3aed'];let col=COLS[4],w=4,erase=false,down=false,buf=[],last=null;
+COLS.forEach(k=>{const b=document.createElement('button');b.className='sw'+(k==col?' sel':'');b.style.background=k;b.onclick=()=>{col=k;erase=false;pick();[...$('sws').children].forEach(z=>z.classList.toggle('sel',z===b))};$('sws').appendChild(b)});
+function pick(){$('pen').classList.toggle('on',!erase);$('eraser').classList.toggle('on',erase)}
+$('pen').onclick=()=>{erase=false;pick()};$('eraser').onclick=()=>{erase=true;pick()};
+const SZ=[[2,'نازک'],[4,'متوسط'],[8,'ضخیم']];let si=1;$('sz').onclick=()=>{si=(si+1)%3;w=SZ[si][0];$('sz').textContent='ضخامت: '+SZ[si][1]};
+const canDraw=()=>staff(myRole);let boardOn=false;
+function pt(e){const r=c.getBoundingClientRect();return[+((e.clientX-r.left)/r.width).toFixed(3),+((e.clientY-r.top)/r.height).toFixed(3)]}
+function flush(){if(!buf.length)return;const o={c:col,e:erase?1:0,w,p:buf};seg(o);store(o);if(R)R.emit('draw',o).catch(()=>{});buf=last?[last]:[]}
+c.onpointerdown=e=>{if(!canDraw())return;down=true;last=pt(e);buf=[last]};
+c.onpointermove=e=>{if(!down)return;last=pt(e);buf.push(last);if(buf.length>=10)flush()};
+c.onpointerup=c.onpointerleave=()=>{if(down)flush();down=false;buf=[];last=null};
+$('clear').onclick=()=>{if(!staff(myRole))return;wipe();hist=[];if(R)R.emit('clr',{}).catch(()=>{})};
+async function sync(pid){clog.slice(-30).forEach((c,i)=>setTimeout(()=>R.emit('chat',{n:c.n,t:c.t,h:c.h,to:pid,old:1}).catch(()=>{}),i*150));const h=hist.slice();for(let i=0;i<h.length;i++){R.emit('draw',{...h[i],to:pid}).catch(()=>{});if(i%10==9)await new Promise(r=>setTimeout(r,400))}}
+// ---- tiles
+function tile(id,label,isT,av){let t=tiles[id];if(!t){t=document.createElement('div');t.className='v';t.innerHTML='<b></b><span></span>';t.dataset.id=id;t.onclick=()=>{if(document.fullscreenElement)document.exitFullscreen();else if(t.requestFullscreen)t.requestFullscreen()};$('vids').appendChild(t);tiles[id]=t}
+ t.querySelector('b').textContent=av||ini(label);t.querySelector('span').textContent=label;t.classList.toggle('t',!!isT);return t}
+function setStream(id,s,muted){const t=tiles[id];if(!t)return;let v=t.querySelector('video');if(!v){v=document.createElement('video');v.autoplay=v.playsInline=true;t.prepend(v)}v.muted=!!muted;if(v.srcObject!==s)v.srcObject=s;const pr=v.play&&v.play();if(pr)pr.catch(()=>{$('unmute').style.display=''});watch(id,s)}
+// ---- webrtc via room signaling
+function mkpc(pid){const pc=new RTCPeerConnection(ICE);pcs[pid]=pc;pend[pid]=[];
+ pc.onicecandidate=e=>{if(e.candidate)R.emit('sig',{to:pid,k:'ice',d:e.candidate.toJSON()}).catch(()=>{})};
+ pc.ontrack=e=>{if(!tiles[pid])tile(pid,'...');setStream(pid,e.streams[0],false)};
+ pc.onconnectionstatechange=()=>{if(pc.connectionState==='failed'){drop(pid)}};return pc}
+function attach(pc){pc.getTransceivers().forEach(tr=>{const k=tr.receiver.track.kind,t=stream&&stream.getTracks().find(z=>z.kind===k);tr.direction='sendrecv';if(t)tr.sender.replaceTrack(t)})}
+async function call(pid){try{const pc=mkpc(pid);pc.addTransceiver('audio');pc.addTransceiver('video');attach(pc);
+ await pc.setLocalDescription(await pc.createOffer());R.emit('sig',{to:pid,k:'offer',d:{type:pc.localDescription.type,sdp:pc.localDescription.sdp}}).catch(()=>{})}catch(e){}}
+async function onSig(m){const d=m.data;if(!d||d.to!==me||m.isMe)return;const pid=m.peer;
+ try{if(d.k==='offer'){const pc=pcs[pid]||mkpc(pid);await pc.setRemoteDescription(d.d);attach(pc);await pc.setLocalDescription(await pc.createAnswer());
+   R.emit('sig',{to:pid,k:'answer',d:{type:pc.localDescription.type,sdp:pc.localDescription.sdp}});(pend[pid]||[]).forEach(i=>pc.addIceCandidate(i));pend[pid]=[]}
+  else if(d.k==='answer'){const pc=pcs[pid];if(pc){await pc.setRemoteDescription(d.d);(pend[pid]||[]).forEach(i=>pc.addIceCandidate(i));pend[pid]=[]}}
+  else if(d.k==='ice'){const pc=pcs[pid];if(pc&&pc.remoteDescription)pc.addIceCandidate(d.d);else(pend[pid]=pend[pid]||[]).push(d.d)}}catch(e){}}
+function drop(pid){if(pcs[pid]){try{pcs[pid].close()}catch(e){}delete pcs[pid]}if(tiles[pid]){tiles[pid].remove();delete tiles[pid]}}
+// ---- people / room state
+function micState(){const t=stream&&stream.getAudioTracks()[0],on=!!(t&&t.enabled);$('mic').classList.toggle('off',!on);$('mic').textContent=on?'🎤 میکروفون روشن':'🔇 میکروفون خاموش'}
+function viewB(){const o=boardOn;$('board').style.display=o?'block':'none';$('wait').style.display=o?'none':'flex';$('tools').style.display=o&&staff(myRole)?'flex':'none'}
+function peersChanged(ch){
+ peersNow=ch.peers;if(!me){const m=ch.peers.find(p=>p.isMe&&p.sameTab);if(m)me=m.peer}
+ const list=named(ch.peers);RM={};list.forEach((p,i)=>RM[p.peer]=i==0?'teacher':i==1?'assistant':'student');
+ const idx=list.findIndex(p=>p.peer===me);
+ if(ready&&idx>=MAX){full=true;doLeave('ظرفیت کلاس (۴۰ نفر) پر است.');return}
+ const prev=myRole;myRole=RM[me]||'student';boardOn=list.some(p=>staff(RM[p.peer])&&p.presence.board);const mp=list.find(p=>p.peer===me),mineBoard=!!(mp&&mp.presence.board);
+ if(ready&&boardOn!==lastB)add('',boardOn?'🎓 کلاس شروع شد':'⏹ کلاس به پایان رسید');lastB=boardOn;
+ if(myRole!==prev){if(staff(myRole)&&!staff(prev))add('','شما اکنون '+RL[myRole]+' هستید.');if(prev!=='student'&&myRole==='student')add('','نقش شما دانش‌آموز شد.')}
+ if(staff(myRole)){allowed=true;const t=stream&&stream.getAudioTracks()[0];if(t&&!t.enabled&&prev==='student'&&myRole!==prev){t.enabled=true;micState()}}
+ $('me').textContent=RL[myRole];$('cnt').textContent=list.length+' از '+MAX+' نفر';
+ $('muteall').style.display=myRole==='teacher'?'':'none';$('share').style.display=staff(myRole)?'':'none';$('showb').style.display=staff(myRole)?'':'none';
+ viewB();$('startb').style.display=staff(myRole)?'':'none';
+ $('showb').textContent=mineBoard?'⏹ پایان کلاس':'▶ شروع کلاس';$('showb').classList.toggle('on',!mineBoard);$('showb').classList.toggle('off',mineBoard);const myVc=!!(mp&&mp.presence.vc);$('vc').textContent=(myVc?'🚪 خروج از اتاق صوتی':'🎧 اتاق صوتی')+' ('+list.filter(q=>q.presence.vc).length+'/8)';$('pform').style.display=staff(myRole)?'flex':'none';
+ // tiles + calls
+ const want={};list.forEach(p=>{if(p.isMe)return;if(staff(myRole)||staff(RM[p.peer])||(myVc&&p.presence.vc))want[p.peer]=p});
+ Object.keys(tiles).forEach(id=>{if(id!=='me'&&!want[id])drop(id)});
+ const mine=list.find(p=>p.peer===me);if(mine)tile('me',name+' (شما)',myRole==='teacher',myAv);
+ Object.values(want).forEach(p=>{tile(p.peer,(p.presence.hand?'✋ ':'')+(p.presence.vc?'🎧 ':'')+p.presence.name,RM[p.peer]==='teacher',p.presence.av);
+  if(p.peer<me&&!pcs[p.peer])call(p.peer)});
+ if(myRole==='teacher')list.forEach(p=>{if(!p.isMe&&!synced[p.peer]){synced[p.peer]=1;sync(p.peer)}});
+ ch.left.forEach(p=>{drop(p.peer);delete synced[p.peer]});
+ // people list
+ const box=$('people');box.innerHTML='';list.forEach(p=>{const r=RM[p.peer],d=document.createElement('div');d.className='p';
+  d.innerHTML='<div class="av"></div><div class="n"></div><span class="b '+r+'">'+RL[r]+'</span>';
+  d.firstChild.textContent=p.presence.av||ini(p.presence.name);d.children[1].textContent=p.presence.name+(p.isMe?' (شما)':'');
+  if(p.presence.hand||p.presence.vc){const h=document.createElement('span');h.textContent=(p.presence.hand?'✋':'')+(p.presence.vc?'🎧':'');d.appendChild(h)}
+  if(myRole==='teacher'&&r==='student'){const b=document.createElement('button');b.textContent=p.presence.talk?'قطع':'اجازه صحبت';
+   b.onclick=()=>R.emit('ctl',{to:p.peer,k:p.presence.talk?'deny':'allow'}).catch(()=>{});d.appendChild(b)}
+  box.appendChild(d)})}
+function onCtl(m){const d=m.data;if(!d||m.isMe||!staff(RM[m.peer]))return;if(d.to&&d.to!==me)return;
+ const t=stream&&stream.getAudioTracks()[0];
+ if(d.k==='mute'&&!staff(myRole)){allowed=false;if(t)t.enabled=false;micState();R.presence({talk:null});add('','استاد همه را بی‌صدا کرد.')}
+ if(d.k==='allow'){allowed=true;if(t)t.enabled=true;micState();R.presence({talk:1,hand:null});$('hand').classList.remove('on');add('','استاد به شما اجازه صحبت داد 🎤')}
+ if(d.k==='deny'){allowed=false;if(t)t.enabled=false;micState();R.presence({talk:null})}}
+
+let lastErr=null;const inFrame=window.self!==window.top;
+function errMsg(e){const n=e&&e.name;if(n==='NotAllowedError'||n==='SecurityError')return inFrame?'این صفحه داخل یک قاب باز شده و مرورگر اجازه‌ی دوربین را نمی‌دهد. صفحه را مستقیماً و در یک تب جدید (با HTTPS) باز کنید.':'دسترسی مسدود است. در Chrome روی 🔒 کنار آدرس بزنید ← «تنظیمات سایت» ← دوربین و میکروفون را روی «اجازه» بگذارید ← صفحه را رفرش کنید.';if(n==='NotFoundError')return 'دوربین یا میکروفونی روی این دستگاه پیدا نشد.';if(n==='NotReadableError')return 'دوربین/میکروفون توسط برنامه‌ی دیگری استفاده می‌شود.';return 'دسترسی به دوربین/میکروفون ممکن نشد ('+(n||'خطا')+').'}
+async function enableMedia(){if(stream)return true;
+ if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){add('','این محیط اجازه‌ی دوربین/میکروفون نمی‌دهد (صفحه باید با HTTPS باز شود).');$('media').style.display='';return false}
+ let s=null,err=null;try{s=await navigator.mediaDevices.getUserMedia({video:{width:640,height:480},audio:true})}catch(e){err=e;try{s=await navigator.mediaDevices.getUserMedia({audio:true})}catch(e2){err=e2}}
+ if(!s){lastErr=err;add('',errMsg(err));$('media').style.display='';return false}
+ stream=s;$('media').style.display='none';const a=s.getAudioTracks()[0];if(a)a.enabled=staff(myRole)||allowed;micState();
+ tile('me',name+' (شما)',myRole==='teacher',myAv);setStream('me',s,true);Object.values(pcs).forEach(pc=>attach(pc));add('','دوربین/میکروفون فعال شد ✅');return true}
+function sseRoom(){const MEP=Math.random().toString(36).slice(2,10)+Date.now().toString(36).slice(-4);
+ return{join:async code=>{const sub={},ph=new Set();let peers=[],prev={};const es=new EventSource('/events?room='+encodeURIComponent(code)+'&peer='+MEP);es.onopen=()=>setNet(true);es.onerror=()=>setNet(false);
+  const post=(u,b)=>fetch(u,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(Object.assign({room:code,peer:MEP},b))}).then(()=>{});
+  es.addEventListener('peers',e=>{const L=JSON.parse(e.data),old=prev,cur={};
+   peers=L.map(p=>{const q={peer:p.peer,isMe:p.peer===MEP,sameTab:p.peer===MEP,kind:'viewer',guest:false,by:null,presence:p.presence||{}};cur[p.peer]=q;return q});
+   const joined=peers.filter(p=>!old[p.peer]),left=Object.keys(old).filter(k=>!cur[k]).map(k=>old[k]),updated=peers.filter(p=>old[p.peer]&&JSON.stringify(old[p.peer].presence)!==JSON.stringify(p.presence));
+   prev=cur;ph.forEach(h=>h({peers,joined,left,updated}))});
+  es.addEventListener('msg',e=>{const m=JSON.parse(e.data);m.isMe=m.peer===MEP;m.sameTab=m.isMe;(sub[m.topic]||[]).forEach(h=>h(m))});
+  return{emit:(t,d)=>post('/emit',{topic:t,data:d}),on:(t,h)=>{(sub[t]=sub[t]||[]).push(h);return()=>{}},presence:pa=>post('/presence',{patch:pa}),onPeers:h=>{ph.add(h);return()=>ph.delete(h)},peers:()=>peers,leave:async()=>{es.close();post('/leave',{})}}}}}
+
+// ---- بدون سرور: سیگنال‌دهی از طریق بروکر عمومی MQTT (برای GitHub Pages و هاست‌های ایستا)
+const useMqtt=!location.search.includes('sse');
+function loadMqtt(){return new Promise((ok,no)=>{if(window.mqtt)return ok();const z=document.createElement('script');z.src='https://cdn.jsdelivr.net/npm/mqtt@5.10.1/dist/mqtt.min.js';z.onload=ok;z.onerror=no;document.head.appendChild(z)})}
+function mqttRoom(){const MEP=Math.random().toString(36).slice(2,10)+Date.now().toString(36).slice(-4),BR=['wss://broker.emqx.io:8084/mqtt','wss://broker.hivemq.com:8884/mqtt'];
+ return{join:async code=>{await loadMqtt();const base='rohamclass1/'+code,pt=base+'/p/'+MEP;let cl=null;
+  for(const u of BR){try{cl=await new Promise((ok,no)=>{const c=mqtt.connect(u,{clientId:'rc'+MEP,clean:true,reconnectPeriod:3000,connectTimeout:6000,will:{topic:pt,payload:'',retain:true,qos:0}});
+   const to=setTimeout(()=>{c.end(true);no()},7000);c.once('connect',()=>{clearTimeout(to);ok(c)});c.on('error',()=>{})});break}catch(e){}}
+  if(!cl)throw new Error('broker');
+  const sub={},ph=new Set(),BADK=['__proto__','constructor','prototype'];let prev={},pm={},mine={},tm=null;
+  cl.on('connect',()=>setNet(true));cl.on('close',()=>setNet(false));
+  function flushPeers(){const old=prev,cur={};const peers=Object.keys(pm).map(id=>{const q={peer:id,isMe:id===MEP,sameTab:id===MEP,kind:'viewer',guest:false,by:null,presence:pm[id]};cur[id]=q;return q});
+   const joined=peers.filter(q=>!old[q.peer]),left=Object.keys(old).filter(k=>!cur[k]).map(k=>old[k]),updated=peers.filter(q=>old[q.peer]&&JSON.stringify(old[q.peer].presence)!==JSON.stringify(q.presence));
+   prev=cur;ph.forEach(h=>h({peers,joined,left,updated}))}
+  cl.on('message',(tp,pl)=>{const z=pl.toString();
+   if(tp===base+'/e'){let m;try{m=JSON.parse(z)}catch(e){return}m.isMe=m.peer===MEP;m.sameTab=m.isMe;(sub[m.topic]||[]).forEach(h=>h(m))}
+   else if(tp.startsWith(base+'/p/')){const id=tp.slice(base.length+3);if(!z)delete pm[id];else{try{pm[id]=JSON.parse(z)}catch(e){return}}clearTimeout(tm);tm=setTimeout(flushPeers,60)}});
+  cl.subscribe([base+'/e',base+'/p/+']);cl.publish(pt,JSON.stringify(mine),{retain:true});
+  return{emit:(t,d)=>new Promise((ok,no)=>cl.publish(base+'/e',JSON.stringify({topic:t,data:d,peer:MEP}),e=>e?no(e):ok())),
+   on:(t,h)=>{(sub[t]=sub[t]||[]).push(h);return()=>{}},
+   presence:pa=>{for(const k in pa){if(BADK.includes(k))continue;if(pa[k]===null)delete mine[k];else mine[k]=pa[k]}cl.publish(pt,JSON.stringify(mine),{retain:true});return Promise.resolve()},
+   onPeers:h=>{ph.add(h);return()=>ph.delete(h)},peers:()=>Object.values(prev),
+   leave:async()=>{cl.publish(pt,'',{retain:true},()=>cl.end())}}}}}
+const getRoom=async()=>useMqtt?mqttRoom():sseRoom();
+
+// ---- anime customization, reactions, speaking glow, screen share
+const AV=['🥷','⚔️','🦊','🐉','🔥','⚡','😎','👺'],TH=[['blaze','شعله'],['storm','رعد'],['shade','سایه'],['leaf','جنگل']];let myAv=AV[0];
+try{myAv=localStorage.getItem('av')||myAv}catch(e){}
+document.documentElement.dataset.th='storm';try{document.documentElement.dataset.th=localStorage.getItem('th')||'storm'}catch(e){}
+function pickRow(el,items,cur,fn){el.innerHTML='';items.forEach(it=>{const k=Array.isArray(it)?it[0]:it,b=document.createElement('button');b.textContent=Array.isArray(it)?it[1]:it;if(k===cur)b.className='sel';
+ b.onclick=()=>{[...el.children].forEach(z=>z.classList.remove('sel'));b.classList.add('sel');fn(k)};el.appendChild(b)})}
+pickRow($('avs'),AV,myAv,k=>{myAv=k;try{localStorage.setItem('av',k)}catch(e){}});
+pickRow($('ths'),TH,document.documentElement.dataset.th,k=>{document.documentElement.dataset.th=k;try{localStorage.setItem('th',k)}catch(e){}});
+function fly(e){const d=document.createElement('div');d.textContent=e;d.className='fl';d.style.left=(8+Math.random()*80)+'%';$('fx').appendChild(d);setTimeout(()=>d.remove(),2300)}
+let lastRx=0;document.querySelectorAll('.rx').forEach(b=>b.onclick=()=>{if(Date.now()-lastRx<700)return;lastRx=Date.now();if(R)R.emit('rx',{e:b.dataset.e}).catch(()=>{});else fly(b.dataset.e)});
+let AC=null;const watched={};
+function watch(id,s){if(!s.getAudioTracks().length||watched[id]===s.id)return;watched[id]=s.id;
+ try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();const an=AC.createAnalyser();an.fftSize=256;AC.createMediaStreamSource(s).connect(an);const b=new Uint8Array(an.fftSize);
+  setInterval(()=>{const t=tiles[id];if(!t)return;an.getByteTimeDomainData(b);let m=0;for(const v of b)m=Math.max(m,Math.abs(v-128));t.classList.toggle('sp',m>14)},180)}catch(e){}}
+$('unmute').onclick=()=>{document.querySelectorAll('#vids video').forEach(v=>v.play().catch(()=>{}));if(AC)AC.resume();$('unmute').style.display='none'};
+let sharing=null;const vsender=pc=>{const t=pc.getTransceivers().find(z=>z.receiver.track.kind==='video');return t&&t.sender};
+function stopShare(){if(!sharing)return;sharing.getTracks().forEach(t=>t.stop());sharing=null;const cv=stream&&stream.getVideoTracks()[0];
+ if(cv)Object.values(pcs).forEach(pc=>{const s=vsender(pc);if(s)s.replaceTrack(cv)});if(stream)setStream('me',stream,true);$('share').classList.remove('on')}
+$('share').onclick=async()=>{if(sharing){stopShare();return}
+ try{const d=await navigator.mediaDevices.getDisplayMedia({video:true});sharing=d;const vt=d.getVideoTracks()[0];
+  Object.values(pcs).forEach(pc=>{const s=vsender(pc);if(s)s.replaceTrack(vt)});setStream('me',new MediaStream([vt]),true);$('share').classList.add('on');vt.onended=stopShare}
+ catch(e){add('','اشتراک صفحه ممکن نشد (روی گوشی پشتیبانی نمی‌شود).')}};
+
+// ---- reliability, voice room, polls, chat history
+const clog=[];let poll=null;
+function setNet(ok){$('net').textContent=ok?'🟢 متصل':'🔴 قطع';}
+function em(t,d){if(!R)return Promise.resolve();return R.emit(t,d).catch(e=>add('','⚠️ ارسال نشد: '+((e&&e.message)||'اتصال یا دسترسی مشکل دارد')))}
+$('vc').onclick=async()=>{const me0=peersNow.find(q=>q.peer===me),on=!(me0&&me0.presence.vc);
+ if(on){if(peersNow.filter(q=>q.presence&&q.presence.vc).length>=8){add('','اتاق صوتی پر است (حداکثر ۸ نفر).');return}
+  if(!(await enableMedia()))return;allowed=true;const t=stream.getAudioTracks()[0];if(t)t.enabled=true;micState()}
+ else if(!staff(myRole)){allowed=false;const t=stream&&stream.getAudioTracks()[0];if(t)t.enabled=false;micState()}
+ if(R)R.presence({vc:on?1:null})};
+$('savb').onclick=()=>{const a=document.createElement('a');a.href=c.toDataURL('image/png');a.download='board.png';a.click()};
+function renderPoll(){const b=$('pollbox');if(!poll){b.textContent='نظرسنجی فعالی وجود ندارد.';return}
+ const vs=Object.values(poll.v),tot=vs.length,cnt=poll.o.map((_,i)=>vs.filter(x=>x===i).length);b.innerHTML='';
+ const q=document.createElement('b');q.textContent=poll.q;b.appendChild(q);
+ poll.o.forEach((o,i)=>{const pc=tot?Math.round(cnt[i]*100/tot):0,btn=document.createElement('button');btn.style.cssText='width:100%;text-align:start;margin-top:6px;background:linear-gradient(90deg,var(--pri) '+pc+'%,var(--card) '+pc+'%)'+(pc>45?';color:#fff':'');
+  btn.disabled=!poll.open;btn.textContent=o+' — '+cnt[i]+' ('+pc+'٪)';btn.onclick=()=>em('poll',{k:'vote',i});b.appendChild(btn)});
+ if(!poll.open){const e=document.createElement('div');e.className='hint';e.textContent='نظرسنجی بسته شد';b.appendChild(e)}}
+function pollH(m){const d=m.data||{},r=RM[m.peer];
+ if(d.k==='new'&&staff(r)&&Array.isArray(d.o)){poll={q:String(d.q).slice(0,150),o:d.o.slice(0,5).map(z=>String(z).slice(0,60)),v:{},open:true};renderPoll();add('','📊 نظرسنجی جدید: '+poll.q);$('t3').click()}
+ else if(d.k==='vote'&&poll&&poll.open&&Number.isInteger(d.i)&&d.i>=0&&d.i<poll.o.length){poll.v[m.peer]=d.i;renderPoll()}
+ else if(d.k==='end'&&staff(r)&&poll){poll.open=false;renderPoll()}}
+$('pgo').onclick=()=>{const q=$('pq').value.trim(),o=$('po').value.split(/[,،]/).map(z=>z.trim()).filter(Boolean);if(q&&o.length>=2){em('poll',{k:'new',q,o});$('pq').value=$('po').value=''}else add('','سؤال و حداقل دو گزینه (با ویرگول) بنویسید.')};
+$('pend').onclick=()=>em('poll',{k:'end'});
+let full=false;
+function doLeave(msg){if(stream)stream.getTracks().forEach(t=>t.stop());Object.keys(pcs).forEach(drop);if(R){try{R.leave()}catch(e){}}
+ $('app').innerHTML='<p style="padding:60px 20px;text-align:center;font-size:16px">'+(msg||'از کلاس خارج شدید.')+'</p>'}
+// ---- join
+$('go').onclick=async()=>{
+ name=$('nm').value.trim().slice(0,30)||'ناشناس';code=($('code').value.trim().toLowerCase().replace(/[^a-z0-9_.-]/g,'')||'class1');
+ $('join').style.display='none';$('app').style.display='block';$('title').textContent='کلاس: '+code;
+ tile('me',name+' (شما)',0,myAv);if(stream)setStream('me',stream,true);enableMedia();
+ try{const room=await getRoom();if(!room)throw 0;R=await room.join(code);setNet(true);
+  R.on('chat',m=>{const d=m.data||{};if(d.to&&d.to!==me)return;if(!d.old){clog.push({n:d.n,t:d.t,h:d.h});if(clog.length>40)clog.shift()}add((d.n||'؟')+(d.h?' · '+d.h:''),String(d.t||''),d.old?'student':RM[m.peer],m.isMe)});
+  R.on('draw',m=>{const d=m.data;if(m.isMe||!d||!Array.isArray(d.p)||!d.p.length)return;const r=RM[m.peer];
+   if(d.to){if(d.to!==me||r!=='teacher')return}else if(!staff(r))return;seg(d);store(d)});
+  R.on('clr',m=>{if(!m.isMe&&staff(RM[m.peer])){wipe();hist=[]}});
+  R.on('rx',m=>{if(m.data&&typeof m.data.e==='string'&&m.data.e.length<=4)fly(m.data.e)});R.on('poll',pollH);R.on('sig',onSig);R.on('ctl',onCtl);R.onPeers(peersChanged);
+  await R.presence({name,t:Date.now(),av:myAv});setTimeout(()=>{ready=true},2500);
+  add('','به کلاس وصل شدید. کد کلاس: '+code);
+ }catch(e){setNet(false);add('','اتصال آنلاین برقرار نشد (اینترنت یا بروکر را بررسی کنید). فعلاً حالت تک‌نفره.');myRole='teacher';allowed=true;$('startb').style.display='';$('showb').style.display=''}
+};
+// ---- controls
+$('media').onclick=()=>enableMedia();
+async function askPerm(){const m=$('permmsg');m.textContent='در حال درخواست… پنجره‌ی اجازه را در Chrome تأیید کنید.';
+ if(!window.isSecureContext){m.textContent='این آدرس HTTP است؛ Chrome فقط در HTTPS (یا localhost) دوربین را باز می‌کند.';return}
+ if(await enableMedia()){$('pv').srcObject=stream;$('pv').style.display='block';m.textContent='✅ دوربین و میکروفون فعال است. حالا وارد کلاس شوید.';$('askperm').textContent='دوربین فعال است ✓';permState()}
+ else{m.textContent=errMsg(lastErr);permState()}}
+async function permState(){const L={granted:'✅ مجاز',denied:'⛔ مسدود',prompt:'⏳ هنوز اجازه داده نشده'};let t=[];
+ for(const [k,l] of [['camera','دوربین'],['microphone','میکروفون']]){try{const r=await navigator.permissions.query({name:k});t.push(l+': '+L[r.state]);r.onchange=permState}catch(e){t.push(l+': نامشخص')}}
+ $('permst').textContent='وضعیت — '+t.join(' | ')+(inFrame?'  ⚠️ داخل قاب باز شده':'')}
+$('askperm').onclick=askPerm;permState();
+$('mic').onclick=async()=>{if(!stream&&!(await enableMedia()))return;const t=stream.getAudioTracks()[0];if(!t)return;
+ if(!staff(myRole)&&!allowed&&R){add('','برای صحبت کردن، ✋ را بزنید تا استاد اجازه دهد.');return}t.enabled=!t.enabled;micState()};
+$('cam').onclick=async e=>{const b=e.currentTarget;if(!stream&&!(await enableMedia()))return;const t=stream.getVideoTracks()[0];if(!t)return;t.enabled=!t.enabled;b.classList.toggle('off',!t.enabled)};
+$('hand').onclick=e=>{const h=!e.currentTarget.classList.contains('on');e.currentTarget.classList.toggle('on',h);if(R)R.presence({hand:h?1:null})};
+$('showb').onclick=()=>{if(!R){boardOn=!boardOn;viewB();$('showb').textContent=boardOn?'⏹ پایان کلاس':'▶ شروع کلاس';return}const mp=peersNow.find(p=>p.peer===me);R.presence({board:mp&&mp.presence.board?null:1})};
+$('startb').onclick=()=>$('showb').click();
+$('muteall').onclick=()=>R&&R.emit('ctl',{k:'mute'}).catch(()=>{});
+$('invite').onclick=async()=>{const v=location.href.split('#')[0]+'#'+code;try{await navigator.clipboard.writeText(v);add('','کپی شد: '+v)}catch(e){add('',v)}};
+$('leave').onclick=()=>doLeave();
+</script>
+</body>
+</html>
